@@ -8,7 +8,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-type HelmService struct {}
+type HelmService struct{}
 
 func NewHelmService() *HelmService {
 	return &HelmService{}
@@ -28,10 +28,12 @@ func (h *HelmService) ListDockerImages(helmChart string) ([]string, error) {
 	for _, image := range images {
 		arr := strings.Split(image, " ")
 		newImageName := arr[len(arr)-1]
+		newImageName = strings.ReplaceAll(newImageName, "'", "")
+		newImageName = strings.ReplaceAll(newImageName, "\"", "")
 		if slices.Contains(results, newImageName) {
 			continue
 		}
 		results = append(results, newImageName)
 	}
-	return results, nil 
+	return results, nil
 }
